@@ -1,23 +1,59 @@
+import 'dart:ffi';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_list/data/api_auth.dart';
 import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
 import 'package:movie_list/widgets/movie_card.dart';
 import 'data/movie.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 
 class SearchMovie extends StatefulWidget {
   final Movie movies;
 
-  const SearchMovie({Key? key, required this.movies}) : super(key: key);
+  SearchMovie({
+    Key? key,
+    required this.movies,
+  }) : super(key: key);
 
   @override
   _SearchMovieState createState() => _SearchMovieState();
 }
 
 class _SearchMovieState extends State<SearchMovie> {
+  Map<String, dynamic> _movieList = {};
+
   @override
   Widget build(BuildContext context) {
     String movies = widget.movies.name;
+
+    Future<void> _fetchData(movieName) async {
+      var apiKey = ApiAuth().getApiKey();
+      var url = "http://www.omdbapi.com/?apikey=$apiKey&&s=$movieName";
+
+      var response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+        if (mounted) {
+          setState(() {
+            _movieList = data;
+          });
+        }
+      } else {
+        print('request failed with status code : ${response.statusCode}');
+      }
+    }
+
+    if (mounted) {
+      setState(() {
+        _fetchData(movies);
+        print(_movieList);
+      });
+    }
 
     return Scaffold(
       backgroundColor: dBlue,
@@ -88,24 +124,34 @@ class _SearchMovieState extends State<SearchMovie> {
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 0),
                   child: Container(
-                      child: GridView.count(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
-                    childAspectRatio: 2 / 3,
-                    children: [
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                      MovieCard(),
-                    ],
-                  )),
+                    child: GridView.builder(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: MediaQuery.of(context).orientation ==
+                                Orientation.landscape
+                            ? 4
+                            : 3,
+                        childAspectRatio: 2 / 3,
+                        crossAxisSpacing: 10.0,
+                        mainAxisSpacing: 10.0,
+                      ),
+                      itemCount: _movieList.isNotEmpty
+                          ? _movieList['Search'].length
+                          : 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        return GestureDetector(
+                          key: Key(_movieList['Search'][index]['Title']),
+                          onTap: () {},
+                          child: MovieCard(
+                            name: _movieList['Search'][index]['Title'],
+                            year: _movieList['Search'][index]['Year'],
+                            posterUrl: _movieList['Search'][index]['Poster'],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
                 ),
               )
             ],
