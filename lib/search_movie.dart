@@ -11,7 +11,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
 
 class SearchMovie extends StatefulWidget {
-  final Movie movies;
+  Movie movies;
+  String movieSearch = '';
 
   SearchMovie({
     Key? key,
@@ -25,35 +26,35 @@ class SearchMovie extends StatefulWidget {
 class _SearchMovieState extends State<SearchMovie> {
   Map<String, dynamic> _movieList = {};
 
+  Future<void> _fetchData(movieName) async {
+    var apiKey = ApiAuth().getApiKey();
+    var url = "http://www.omdbapi.com/?apikey=$apiKey&&s=$movieName";
+
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+
+      setState(() {
+        _movieList = data;
+      });
+    } else {
+      print('request failed with status code : ${response.statusCode}');
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (mounted) {
+      _fetchData(widget.movies.name);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     String movies = widget.movies.name;
-
-    Future<void> _fetchData(movieName) async {
-      var apiKey = ApiAuth().getApiKey();
-      var url = "http://www.omdbapi.com/?apikey=$apiKey&&s=$movieName";
-
-      var response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-
-        if (mounted) {
-          setState(() {
-            _movieList = data;
-          });
-        }
-      } else {
-        print('request failed with status code : ${response.statusCode}');
-      }
-    }
-
-    if (mounted) {
-      setState(() {
-        _fetchData(movies);
-        print(_movieList);
-      });
-    }
 
     return Scaffold(
       backgroundColor: dBlue,
@@ -82,7 +83,10 @@ class _SearchMovieState extends State<SearchMovie> {
                         shadowColor: lBlue,
                         child: TextField(
                           onChanged: (moviesIn) {
-                            movies = moviesIn;
+                            setState(() {
+                              widget.movieSearch = moviesIn;
+                              print(widget.movieSearch);
+                            });
                           },
                           style: mainStyle,
                           decoration: InputDecoration(
@@ -95,7 +99,12 @@ class _SearchMovieState extends State<SearchMovie> {
                             suffixIcon: IconButton(
                               icon: Icon(Icons.search_rounded),
                               color: whiteMv,
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  print(widget.movieSearch);
+                                  _fetchData(widget.movieSearch);
+                                });
+                              },
                             ),
                             contentPadding: EdgeInsets.only(
                                 left: 24, bottom: 20, top: 20, right: 24),
