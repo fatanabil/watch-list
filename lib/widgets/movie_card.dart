@@ -5,58 +5,102 @@ class MovieCard extends StatelessWidget {
   final String name;
   final String year;
   final double rating;
+  final String? posterUrl;
 
-  MovieCard({this.name = '', this.year = '', this.rating = 0.0});
+  MovieCard({
+    this.name = '',
+    this.year = '',
+    this.rating = 0.0,
+    this.posterUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 120,
       decoration: BoxDecoration(
-          color: accGreen, borderRadius: BorderRadius.circular(5)),
-      padding: EdgeInsets.only(bottom: 16, left: 16),
+        color: accGreen,
+        image: posterUrl == null || posterUrl == 'N/A'
+            ? DecorationImage(
+                image: AssetImage('assets/img/default.png'),
+              )
+            : DecorationImage(
+                image: NetworkImage(posterUrl!),
+                fit: BoxFit.cover,
+              ),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      // padding: EdgeInsets.only(bottom: 16, left: 8),
       child: AspectRatio(
         aspectRatio: 2 / 3,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Stack(
           children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Container(
-                height: 30,
-                width: 40,
-                decoration: BoxDecoration(
-                  color: dGreen,
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  ),
-                ),
-                child: Center(
-                  child: Text(
-                    rating.toString(),
-                    style: movieRating,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ),
+            Container(
+              decoration: posterUrl == null || posterUrl == 'N/A'
+                  ? BoxDecoration(
+                      color: Colors.transparent,
+                      borderRadius: BorderRadius.circular(5),
+                    )
+                  : BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [
+                          Colors.black.withOpacity(0.7),
+                          Colors.transparent
+                        ],
+                        stops: [0.3, 1],
+                      ),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Text(
-                  name,
-                  style: movieTitle,
-                  textAlign: TextAlign.left,
-                ),
-                Text(
-                  year,
-                  style: movieYear,
-                  textAlign: TextAlign.left,
-                )
-              ],
+            Padding(
+              padding: EdgeInsets.only(left: 8, bottom: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      height: 30,
+                      width: 40,
+                      decoration: BoxDecoration(
+                        color: dGreen.withOpacity(0.9),
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          bottomLeft: Radius.circular(5),
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          rating.toString(),
+                          style: movieRating,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        name,
+                        style: posterUrl == null || posterUrl == 'N/A'
+                            ? movieTitle.copyWith(color: priBlue)
+                            : movieTitle,
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        year,
+                        style: movieYear,
+                        textAlign: TextAlign.left,
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ],
         ),
