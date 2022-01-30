@@ -62,24 +62,6 @@ class MovieCard extends StatelessWidget {
                 children: [
                   Align(
                     alignment: Alignment.topRight,
-                    child: Container(
-                      height: 30,
-                      width: 40,
-                      decoration: BoxDecoration(
-                        color: dGreen.withOpacity(0.9),
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(5),
-                          bottomLeft: Radius.circular(5),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          rating.toString(),
-                          style: movieRating,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ),
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
