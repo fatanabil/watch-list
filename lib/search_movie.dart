@@ -83,10 +83,7 @@ class _SearchMovieState extends State<SearchMovie> {
                         shadowColor: lBlue,
                         child: TextField(
                           onChanged: (moviesIn) {
-                            setState(() {
-                              widget.movieSearch = moviesIn;
-                              print(widget.movieSearch);
-                            });
+                            widget.movieSearch = moviesIn;
                           },
                           style: mainStyle,
                           decoration: InputDecoration(
@@ -120,7 +117,9 @@ class _SearchMovieState extends State<SearchMovie> {
                         Container(
                           padding: EdgeInsets.only(bottom: 16),
                           child: Text(
-                            "Result For \'$movies\'",
+                            widget.movieSearch == ''
+                                ? "Result For \'$movies\'"
+                                : "Result For \'${widget.movieSearch}\'",
                             style: mainStyle,
                           ),
                         ),
