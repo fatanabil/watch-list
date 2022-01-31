@@ -95,6 +95,7 @@ class _MyAppState extends State<MyApp> {
                                   SearchMovie(
                                     movies: Movie(movies),
                                   ));
+                              FocusScope.of(context).requestFocus(FocusNode());
                             },
                           ),
                           contentPadding: EdgeInsets.only(
