@@ -182,15 +182,37 @@ class _SearchMovieState extends State<SearchMovie> {
                                 ? 0
                                 : _movieList['Search'].length,
                             itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                key: Key(_movieList['Search'][index]['Title']),
-                                onTap: () {},
-                                child: MovieCard(
-                                  name: _movieList['Search'][index]['Title'],
-                                  year: _movieList['Search'][index]['Year'],
-                                  posterUrl: _movieList['Search'][index]
-                                      ['Poster'],
-                                ),
+                              return Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: Container(
+                                      key: Key(
+                                          _movieList['Search'][index]['Title']),
+                                      child: MovieCard(
+                                        name: _movieList['Search'][index]
+                                            ['Title'],
+                                        year: _movieList['Search'][index]
+                                            ['Year'],
+                                        posterUrl: _movieList['Search'][index]
+                                            ['Poster'],
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned.fill(
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: InkWell(
+                                        splashColor:
+                                            Colors.white.withOpacity(0.1),
+                                        onTap: () {},
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                    ),
+                                  )
+                                ],
                               );
                             },
                           ),
