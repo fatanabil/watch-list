@@ -151,7 +151,10 @@ class _SearchMovieState extends State<SearchMovie> {
                               Text(
                                 "Movie Not Found",
                                 textAlign: TextAlign.center,
-                                style: mainStyle,
+                                style: mainStyle.copyWith(
+                                  color: lBlue,
+                                  fontSize: 16,
+                                ),
                               ),
                               SizedBox(
                                 height: Size.screenHeight / 5,
