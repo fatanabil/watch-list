@@ -11,7 +11,7 @@ void main() {
     theme: ThemeData(
       fontFamily: 'Poppins',
       primaryColor: priBlue,
-      accentColor: accGreen,
+      colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accGreen),
     ),
     home: MyApp(),
   ));
