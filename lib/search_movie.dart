@@ -81,7 +81,10 @@ class _SearchMovieState extends State<SearchMovie> {
                         color: dBlue,
                         borderRadius: BorderRadius.circular(32),
                         shadowColor: lBlue,
-                        child: TextField(
+                        child: TextFormField(
+                          initialValue: widget.movieSearch == ''
+                              ? '$movies'
+                              : '${widget.movieSearch}',
                           onChanged: (moviesIn) {
                             widget.movieSearch = moviesIn;
                           },
@@ -98,8 +101,9 @@ class _SearchMovieState extends State<SearchMovie> {
                               color: whiteMv,
                               onPressed: () {
                                 setState(() {
-                                  print(widget.movieSearch);
                                   _fetchData(widget.movieSearch);
+                                  FocusScope.of(context)
+                                      .requestFocus(FocusNode());
                                 });
                               },
                             ),
@@ -131,35 +135,63 @@ class _SearchMovieState extends State<SearchMovie> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 0),
-                  child: Container(
-                    child: GridView.builder(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: MediaQuery.of(context).orientation ==
-                                Orientation.landscape
-                            ? 4
-                            : 3,
-                        childAspectRatio: 2 / 3,
-                        crossAxisSpacing: 10.0,
-                        mainAxisSpacing: 10.0,
-                      ),
-                      itemCount: _movieList.isNotEmpty
-                          ? _movieList['Search'].length
-                          : 0,
-                      itemBuilder: (BuildContext context, int index) {
-                        return GestureDetector(
-                          key: Key(_movieList['Search'][index]['Title']),
-                          onTap: () {},
-                          child: MovieCard(
-                            name: _movieList['Search'][index]['Title'],
-                            year: _movieList['Search'][index]['Year'],
-                            posterUrl: _movieList['Search'][index]['Poster'],
+                  child: _movieList['Response'] == 'False' ||
+                          _movieList.length <= 0
+                      ? Container(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/img/no-movie.png',
+                              ),
+                              SizedBox(
+                                height: 16,
+                              ),
+                              Text(
+                                "Movie Not Found",
+                                textAlign: TextAlign.center,
+                                style: mainStyle,
+                              ),
+                              SizedBox(
+                                height: Size.screenHeight / 5,
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : Container(
+                          child: GridView.builder(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  MediaQuery.of(context).orientation ==
+                                          Orientation.landscape
+                                      ? 4
+                                      : 3,
+                              childAspectRatio: 2 / 3,
+                              crossAxisSpacing: 10.0,
+                              mainAxisSpacing: 10.0,
+                            ),
+                            itemCount: _movieList['Response'] == 'False' ||
+                                    _movieList.length <= 0
+                                ? 0
+                                : _movieList['Search'].length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return GestureDetector(
+                                key: Key(_movieList['Search'][index]['Title']),
+                                onTap: () {},
+                                child: MovieCard(
+                                  name: _movieList['Search'][index]['Title'],
+                                  year: _movieList['Search'][index]['Year'],
+                                  posterUrl: _movieList['Search'][index]
+                                      ['Poster'],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                 ),
               )
             ],
