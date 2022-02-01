@@ -13,7 +13,7 @@ import 'dart:convert' as convert;
 
 class SearchMovie extends StatefulWidget {
   Movie movies;
-  String movieSearch = '';
+  String movieSearch = 'null';
 
   SearchMovie({
     Key? key,
@@ -36,9 +36,11 @@ class _SearchMovieState extends State<SearchMovie> {
     if (response.statusCode == 200) {
       var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-      setState(() {
-        _movieList = data;
-      });
+      if (mounted) {
+        setState(() {
+          _movieList = data;
+        });
+      }
     } else {
       print('request failed with status code : ${response.statusCode}');
     }
@@ -83,7 +85,7 @@ class _SearchMovieState extends State<SearchMovie> {
                         borderRadius: BorderRadius.circular(32),
                         shadowColor: lBlue,
                         child: TextFormField(
-                          initialValue: widget.movieSearch == ''
+                          initialValue: widget.movieSearch == 'null'
                               ? '$movies'
                               : '${widget.movieSearch}',
                           onChanged: (moviesIn) {
@@ -102,7 +104,9 @@ class _SearchMovieState extends State<SearchMovie> {
                               color: whiteMv,
                               onPressed: () {
                                 setState(() {
-                                  _fetchData(widget.movieSearch);
+                                  if (widget.movieSearch != 'null') {
+                                    _fetchData(widget.movieSearch);
+                                  }
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 });
@@ -122,7 +126,7 @@ class _SearchMovieState extends State<SearchMovie> {
                         Container(
                           padding: EdgeInsets.only(bottom: 16),
                           child: Text(
-                            widget.movieSearch == ''
+                            widget.movieSearch == 'null'
                                 ? "Result For \'$movies\'"
                                 : "Result For \'${widget.movieSearch}\'",
                             style: mainStyle,
