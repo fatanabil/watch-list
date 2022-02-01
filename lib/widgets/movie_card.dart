@@ -5,13 +5,13 @@ class MovieCard extends StatelessWidget {
   final String name;
   final String year;
   final double rating;
-  final String? posterUrl;
+  final String posterUrl;
 
   MovieCard({
     this.name = '',
     this.year = '',
     this.rating = 0.0,
-    this.posterUrl,
+    this.posterUrl = 'N/A',
   });
 
   @override
@@ -25,8 +25,14 @@ class MovieCard extends StatelessWidget {
                 image: AssetImage('assets/img/default.png'),
               )
             : DecorationImage(
-                image: NetworkImage(posterUrl!),
+                image: Image.network(
+                  posterUrl,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Image.asset('assets/img/default.png');
+                  },
+                ).image,
                 fit: BoxFit.cover,
+                onError: (exception, stackTrace) {},
               ),
         borderRadius: BorderRadius.circular(5),
       ),
