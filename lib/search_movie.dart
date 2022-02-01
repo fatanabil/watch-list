@@ -3,6 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_list/data/api_auth.dart';
+import 'package:movie_list/movie_detail_page.dart';
 import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
 import 'package:movie_list/widgets/movie_card.dart';
@@ -207,7 +208,21 @@ class _SearchMovieState extends State<SearchMovie> {
                                       child: InkWell(
                                         splashColor:
                                             Colors.white.withOpacity(0.1),
-                                        onTap: () {},
+                                        onTap: () {
+                                          _navigateToNextScreen(
+                                            context,
+                                            MovieDetail(
+                                              movieId: _movieList['Search']
+                                                  [index]['imdbID'],
+                                              movieTitle: _movieList['Search']
+                                                  [index]['Title'],
+                                              year: _movieList['Search'][index]
+                                                  ['Year'],
+                                              posterUrl: _movieList['Search']
+                                                  [index]['Poster'],
+                                            ),
+                                          );
+                                        },
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                     ),
@@ -225,4 +240,8 @@ class _SearchMovieState extends State<SearchMovie> {
       ),
     );
   }
+}
+
+void _navigateToNextScreen(BuildContext context, Widget widget) {
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
 }
