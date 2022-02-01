@@ -27,12 +27,12 @@ class MovieCard extends StatelessWidget {
             : DecorationImage(
                 image: Image.network(
                   posterUrl,
-                  errorBuilder: (context, error, stackTrace) {
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
                     return Image.asset('assets/img/default.png');
                   },
                 ).image,
                 fit: BoxFit.cover,
-                onError: (exception, stackTrace) {},
               ),
         borderRadius: BorderRadius.circular(5),
       ),
