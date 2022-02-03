@@ -354,13 +354,11 @@ class _MovieDetailState extends State<MovieDetail> {
         onPressed: () async {
           if (_isAdded == false) {
             await movieDb.addItem(movie);
-            var movieList = await movieDb.fetchMovieList();
             setState(() {
               _isAdded = true;
             });
           } else {
             await movieDb.deleteItem(movie.movieId);
-            var movieList = await movieDb.fetchMovieList();
             setState(() {
               _isAdded = false;
             });
