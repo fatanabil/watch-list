@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:movie_list/helpers/dbhelper.dart';
+import 'package:movie_list/models/MovieModel.dart';
 import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
 import 'package:http/http.dart' as http;
@@ -23,6 +25,8 @@ class MovieDetail extends StatefulWidget {
 
 class _MovieDetailState extends State<MovieDetail> {
   Map<String, dynamic> detailMovie = {};
+  MovieDbProvider movieDb = MovieDbProvider();
+  bool _isAdded = false;
 
   Future<void> _fetchData(movieId) async {
     var apiKey = ApiAuth().getApiKey();
@@ -43,19 +47,39 @@ class _MovieDetailState extends State<MovieDetail> {
     }
   }
 
+  Future<int> checkMovie(String movieId) async {
+    var result = await movieDb.getMovieById(movieId);
+    if (result.length < 1) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     if (mounted) {
       _fetchData(widget.movieId);
+      checkMovie(widget.movieId).then((value) {
+        if (value == 1) {
+          setState(() {
+            _isAdded = false;
+          });
+        } else {
+          setState(() {
+            _isAdded = true;
+          });
+        }
+      });
     }
   }
 
-  bool _isAdded = false;
-
   @override
   Widget build(BuildContext context) {
+    final movie = MovieModel(movieId: widget.movieId);
+
     return Scaffold(
       backgroundColor: dBlue,
       appBar: AppBar(
@@ -75,7 +99,12 @@ class _MovieDetailState extends State<MovieDetail> {
                   color: accGreen,
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
-                    image: NetworkImage('${widget.posterUrl}'),
+                    image: Image.network(
+                      '${widget.posterUrl}',
+                      errorBuilder: (context, error, stackTrace) {
+                        return Image.asset('assets/img/default.png');
+                      },
+                    ).image,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -322,10 +351,20 @@ class _MovieDetailState extends State<MovieDetail> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          setState(() {
-            _isAdded = !_isAdded;
-          });
+        onPressed: () async {
+          if (_isAdded == false) {
+            await movieDb.addItem(movie);
+            var movieList = await movieDb.fetchMovieList();
+            setState(() {
+              _isAdded = true;
+            });
+          } else {
+            await movieDb.deleteItem(movie.movieId);
+            var movieList = await movieDb.fetchMovieList();
+            setState(() {
+              _isAdded = false;
+            });
+          }
         },
         label: AnimatedSwitcher(
           duration: Duration(milliseconds: 200),
