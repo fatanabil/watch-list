@@ -75,6 +75,8 @@ class MovieCard extends StatelessWidget {
                     children: [
                       Text(
                         name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 3,
                         style: posterUrl == null || posterUrl == 'N/A'
                             ? movieTitle.copyWith(color: priBlue)
                             : movieTitle,
