@@ -358,10 +358,66 @@ class _MovieDetailState extends State<MovieDetail> {
               _isAdded = true;
             });
           } else {
-            await movieDb.deleteItem(movie.movieId);
-            setState(() {
-              _isAdded = false;
-            });
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  backgroundColor: priBlue,
+                  title: Text(
+                    'Do you want to remove this movie from watchlist?',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: whiteMv,
+                    ),
+                  ),
+                  content: Text(
+                    '${widget.movieTitle}',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w500,
+                      color: whiteMv,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        primary: Colors.grey[300],
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await movieDb.deleteItem(movie.movieId);
+                        setState(() {
+                          _isAdded = false;
+                        });
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        'Remove',
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                      style: TextButton.styleFrom(
+                        primary: Colors.red[400],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
           }
         },
         label: AnimatedSwitcher(
