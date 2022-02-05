@@ -14,6 +14,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedNavbar = 0;
+  double screenWidth = 0;
 
   final tabs = [
     Center(child: HomePage()),
@@ -30,6 +31,8 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     Size().init(context);
+    screenWidth = Size.screenWidth;
+    print(screenWidth);
 
     return Scaffold(
       body: tabs[_selectedNavbar],
@@ -50,7 +53,7 @@ class _MainPageState extends State<MainPage> {
         ],
         elevation: 20,
         currentIndex: _selectedNavbar,
-        iconSize: 36,
+        iconSize: screenWidth < 425 ? 24 : 36,
         onTap: _changeSelectedNavbar,
         showUnselectedLabels: false,
         backgroundColor: priBlue,
