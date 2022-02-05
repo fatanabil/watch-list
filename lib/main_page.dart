@@ -55,7 +55,7 @@ class _MainPageState extends State<MainPage> {
         showUnselectedLabels: false,
         backgroundColor: priBlue,
         selectedItemColor: accGreen,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w700),
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
       ),
     );
   }
