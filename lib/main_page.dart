@@ -35,29 +35,40 @@ class _MainPageState extends State<MainPage> {
 
     return Scaffold(
       body: tabs[_selectedNavbar],
-      bottomNavigationBar: BottomNavigationBar(
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.movie_creation_outlined),
-            label: 'WatchList',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline_outlined),
-            label: 'Profile',
-          ),
-        ],
-        elevation: 20,
-        currentIndex: _selectedNavbar,
-        iconSize: screenWidth < 425 ? 24 : 36,
-        onTap: _changeSelectedNavbar,
-        showUnselectedLabels: false,
-        backgroundColor: priBlue,
-        selectedItemColor: accGreen,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              color: priBlue,
+              blurRadius: 15.0,
+              offset: Offset(0.0, 0.0),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.movie_creation_outlined),
+              label: 'WatchList',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline_outlined),
+              label: 'Profile',
+            ),
+          ],
+          // elevation: 20,
+          currentIndex: _selectedNavbar,
+          iconSize: screenWidth < 425 ? 24 : 36,
+          onTap: _changeSelectedNavbar,
+          showUnselectedLabels: false,
+          backgroundColor: priBlue,
+          selectedItemColor: accGreen,
+          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }
