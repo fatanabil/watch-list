@@ -78,7 +78,11 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   Widget build(BuildContext context) {
-    final movie = MovieModel(movieId: widget.movieId);
+    final movie = MovieModel(
+      movieId: widget.movieId,
+      movieTitle: widget.movieTitle,
+      moviePoster: widget.posterUrl,
+    );
 
     return Scaffold(
       backgroundColor: dBlue,
