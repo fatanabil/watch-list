@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
+import 'package:movie_list/watchlist_done_fragment.dart';
 import 'package:movie_list/watchlist_unwatch_fragment.dart';
 
 class WatchlistPage extends StatefulWidget {
@@ -56,7 +57,7 @@ class _WatchlistPageState extends State<WatchlistPage> {
                         child: WatchlistUnFragment(),
                       ),
                       Center(
-                        child: Text('Done'),
+                        child: WatchlistDoneFragment(),
                       ),
                     ],
                   ),
