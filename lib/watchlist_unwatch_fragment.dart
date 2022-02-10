@@ -14,6 +14,7 @@ class WatchlistUnFragment extends StatefulWidget {
 class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
   List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
+  late Offset _tapPosition;
 
   Future<void> fetchData() async {
     var data = await movieDb.getUnwatchMovie();
@@ -28,26 +29,124 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    fetchData();
+    if (mounted) {
+      setState(() {
+        fetchData();
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      itemCount: list.length,
-      padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0),
-      itemBuilder: (BuildContext context, int index) {
-        return WatchlistCard(
-          title: list[index].movieTitle,
-          year: list[index].movieYear,
-          posterUrl: list[index].moviePoster,
-        );
-      },
-    );
+    return list.length > 0
+        ? GridView.builder(
+            itemCount: list.length,
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0),
+            itemBuilder: (BuildContext context, int index) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: WatchlistCard(
+                      title: list[index].movieTitle,
+                      year: list[index].movieYear,
+                      posterUrl: list[index].moviePoster,
+                    ),
+                  ),
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: InkWell(
+                        splashColor: whiteMv.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(5),
+                        onTapDown: (TapDownDetails details) {
+                          _tapPosition = details.globalPosition;
+                        },
+                        onLongPress: () {
+                          showMenu(
+                            context: context,
+                            position: RelativeRect.fill,
+                            color: priBlue,
+                            items: [
+                              PopupMenuItem(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.add,
+                                      color: whiteMv,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'Add to Done list',
+                                      style: TextStyle(color: whiteMv),
+                                    ),
+                                  ],
+                                ),
+                                value: ['add', list[index].movieId],
+                              ),
+                              PopupMenuItem(
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.delete,
+                                      color: Colors.red[400],
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                      'Remove from Watch list',
+                                      style: TextStyle(color: Colors.red[400]),
+                                    ),
+                                  ],
+                                ),
+                                value: ['remove', list[index].movieId],
+                              ),
+                            ],
+                          ).then((value) {
+                            if (value?[0] == 'add') {
+                              if (mounted) {
+                                setState(() async {
+                                  MovieModel movie = list[index];
+                                  movie.isWatched = 1;
+                                  await movieDb.updateToDone(value![1], movie);
+                                  fetchData();
+                                });
+                              }
+                            } else {
+                              if (mounted) {
+                                setState(() async {
+                                  await movieDb.deleteItem(value![1]);
+                                  fetchData();
+                                });
+                              }
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              );
+            },
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/img/no-movie.png',
+                scale: 2,
+              ),
+            ],
+          );
   }
 }
