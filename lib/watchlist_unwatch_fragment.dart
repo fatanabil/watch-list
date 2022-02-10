@@ -12,12 +12,11 @@ class WatchlistUnFragment extends StatefulWidget {
 }
 
 class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
-  var list = [];
+  List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
 
   Future<void> fetchData() async {
     var data = await movieDb.getUnwatchMovie();
-    print(data);
     if (mounted) {
       setState(() {
         list = data;
