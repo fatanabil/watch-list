@@ -2,6 +2,8 @@
 
 #### An app for search movies and add it to your WatchList.
 
+###### *(Still under development)*
+
 ## Preview
 
 #### *Homepage*</br>
