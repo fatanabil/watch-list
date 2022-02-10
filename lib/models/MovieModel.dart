@@ -1,6 +1,6 @@
 class MovieModel {
   final String movieId, movieTitle, moviePoster, movieYear;
-  final int isWatched = 0;
+  int isWatched = 0;
 
   MovieModel({
     required this.movieId,
