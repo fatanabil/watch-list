@@ -72,6 +72,21 @@ class MovieDbProvider {
     });
   }
 
+  Future<List<MovieModel>> getWatchedMovie() async {
+    final db = await init();
+    final maps =
+        await db.query("Watch_list", where: "isWatched = ?", whereArgs: [1]);
+
+    return List.generate(maps.length, (i) {
+      return MovieModel(
+        movieId: maps[i]['movieID'].toString(),
+        movieTitle: maps[i]['movieTitle'].toString(),
+        moviePoster: maps[i]['moviePoster'].toString(),
+        movieYear: maps[i]['movieYear'].toString(),
+      );
+    });
+  }
+
   Future<int> deleteItem(String movieID) async {
     final db = await init();
 
