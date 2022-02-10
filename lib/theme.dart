@@ -9,12 +9,12 @@ const Color accGreen = Color(0xFF2FF5BD);
 const Color whiteMv = Color(0xFFF8F8F8);
 
 TextStyle movieTitle =
-    TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: whiteMv);
+    const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: whiteMv);
 TextStyle movieYear =
-    TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: dGreen);
+    const TextStyle(fontSize: 12, fontWeight: FontWeight.w400, color: dGreen);
 TextStyle movieRating =
-    TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: whiteMv);
+    const TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: whiteMv);
 TextStyle menuTitle =
-    TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: whiteMv);
-TextStyle mainStyle = TextStyle(color: whiteMv);
-TextStyle sub = TextStyle(color: dGreen);
+    const TextStyle(fontSize: 20, fontWeight: FontWeight.w400, color: whiteMv);
+TextStyle mainStyle = const TextStyle(color: whiteMv);
+TextStyle sub = const TextStyle(color: dGreen);

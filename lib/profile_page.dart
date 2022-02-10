@@ -16,7 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
       backgroundColor: dBlue,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 24),
+          padding: const EdgeInsets.only(top: 24),
           width: Size.screenWidth,
           height: Size.screenHeight,
           child: Column(

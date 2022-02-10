@@ -21,14 +21,14 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: dBlue,
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           height: double.infinity,
           child: SingleChildScrollView(
             child: Column(
               children: [
                 Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     width: Size.screenWidth,
                     height: Size.screenWidth / 2,
                     color: accGreen,
@@ -42,20 +42,20 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            carouselIndicator(),
-                            carouselIndicator(),
-                            carouselIndicator(),
-                            carouselIndicator(),
-                            carouselIndicator(),
+                          children: const [
+                            CarouselIndicator(),
+                            CarouselIndicator(),
+                            CarouselIndicator(),
+                            CarouselIndicator(),
+                            CarouselIndicator(),
                           ],
                         )
                       ],
                     )),
                 // Searc Bar
                 Container(
-                  padding:
-                      EdgeInsets.only(right: 16, left: 16, top: 32, bottom: 16),
+                  padding: const EdgeInsets.only(
+                      right: 16, left: 16, top: 32, bottom: 16),
                   child: Material(
                     elevation: 5,
                     color: dBlue,
@@ -74,7 +74,7 @@ class _HomePageState extends State<HomePage> {
                         fillColor: priBlue,
                         filled: true,
                         suffixIcon: IconButton(
-                          icon: Icon(Icons.search_rounded),
+                          icon: const Icon(Icons.search_rounded),
                           color: whiteMv,
                           onPressed: () {
                             _navigateToNextScreen(
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
                             FocusScope.of(context).requestFocus(FocusNode());
                           },
                         ),
-                        contentPadding: EdgeInsets.only(
+                        contentPadding: const EdgeInsets.only(
                             left: 24, bottom: 20, top: 20, right: 24),
                         hintText: 'Search Movies',
                         hintStyle: mainStyle,
@@ -93,47 +93,46 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Recomended for you',
-                              style: menuTitle,
-                            ),
-                            Spacer(),
-                            IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.keyboard_arrow_right_outlined,
-                                  color: whiteMv,
-                                ))
-                          ],
-                        ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Recomended for you',
+                            style: menuTitle,
+                          ),
+                          const Spacer(),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.keyboard_arrow_right_outlined,
+                                color: whiteMv,
+                              ))
+                        ],
                       ),
-                      SingleChildScrollView(
-                        padding: EdgeInsets.only(top: 8, left: 16, right: 16),
-                        scrollDirection: Axis.horizontal,
-                        clipBehavior: Clip.none,
-                        child: Wrap(
-                          spacing: 10.0,
-                          direction: Axis.horizontal,
-                          children: [
-                            MovieCard(name: 'A', year: '2006', rating: 8.0),
-                            MovieCard(name: 'A', year: '2006', rating: 8.0),
-                            MovieCard(name: 'A', year: '2006', rating: 8.0),
-                            MovieCard(name: 'A', year: '2006', rating: 8.0),
-                            MovieCard(name: 'A', year: '2006', rating: 8.0),
-                          ],
-                        ),
+                    ),
+                    SingleChildScrollView(
+                      padding:
+                          const EdgeInsets.only(top: 8, left: 16, right: 16),
+                      scrollDirection: Axis.horizontal,
+                      clipBehavior: Clip.none,
+                      child: Wrap(
+                        spacing: 10.0,
+                        direction: Axis.horizontal,
+                        children: const [
+                          MovieCard(name: 'A', year: '2006', rating: 8.0),
+                          MovieCard(name: 'A', year: '2006', rating: 8.0),
+                          MovieCard(name: 'A', year: '2006', rating: 8.0),
+                          MovieCard(name: 'A', year: '2006', rating: 8.0),
+                          MovieCard(name: 'A', year: '2006', rating: 8.0),
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 )
               ],
             ),
@@ -141,7 +140,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-    ;
   }
 }
 
@@ -149,8 +147,8 @@ void _navigateToNextScreen(BuildContext context, Widget widget) {
   Navigator.of(context).push(MaterialPageRoute(builder: (context) => widget));
 }
 
-class carouselIndicator extends StatelessWidget {
-  const carouselIndicator({
+class CarouselIndicator extends StatelessWidget {
+  const CarouselIndicator({
     Key? key,
   }) : super(key: key);
 
@@ -159,7 +157,7 @@ class carouselIndicator extends StatelessWidget {
     return Container(
       width: 8,
       height: 8,
-      margin: EdgeInsets.all(2),
+      margin: const EdgeInsets.all(2),
       decoration:
           BoxDecoration(color: dBlue, borderRadius: BorderRadius.circular(5)),
     );

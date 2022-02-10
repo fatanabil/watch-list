@@ -17,9 +17,9 @@ class _MainPageState extends State<MainPage> {
   double screenWidth = 0;
 
   final tabs = [
-    Center(child: HomePage()),
-    Center(child: WatchlistPage()),
-    Center(child: ProfilePage()),
+    const Center(child: HomePage()),
+    const Center(child: WatchlistPage()),
+    const Center(child: ProfilePage()),
   ];
 
   void _changeSelectedNavbar(int index) {
@@ -36,7 +36,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: tabs[_selectedNavbar],
       bottomNavigationBar: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           boxShadow: [
             BoxShadow(
               color: priBlue,
@@ -46,7 +46,7 @@ class _MainPageState extends State<MainPage> {
           ],
         ),
         child: BottomNavigationBar(
-          items: [
+          items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
               label: 'Home',
@@ -67,7 +67,7 @@ class _MainPageState extends State<MainPage> {
           showUnselectedLabels: false,
           backgroundColor: priBlue,
           selectedItemColor: accGreen,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w500),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
         ),
       ),
     );

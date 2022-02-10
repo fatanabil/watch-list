@@ -20,7 +20,7 @@ class WatchlistCard extends StatelessWidget {
         color: accGreen,
         image: DecorationImage(
           image: posterUrl == null || posterUrl == 'N/A'
-              ? AssetImage('assets/img/default.png')
+              ? const AssetImage('assets/img/default.png')
               : Image.network(
                   posterUrl!,
                   errorBuilder: (BuildContext context, Object error,
@@ -50,18 +50,18 @@ class WatchlistCard extends StatelessWidget {
                           Colors.black.withOpacity(0.7),
                           Colors.transparent
                         ],
-                        stops: [0.3, 1],
+                        stops: const [0.3, 1],
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 8, bottom: 16, right: 8),
+              padding: const EdgeInsets.only(left: 8, bottom: 16, right: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
+                  const Align(
                     alignment: Alignment.topRight,
                   ),
                   Column(

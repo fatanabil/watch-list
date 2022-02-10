@@ -27,7 +27,6 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (mounted) {
       setState(() {
@@ -38,11 +37,12 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return list.length > 0
+    return list.isNotEmpty
         ? GridView.builder(
             itemCount: list.length,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 3 / 2,
                 crossAxisSpacing: 10.0,
@@ -74,7 +74,7 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
                             items: [
                               PopupMenuItem(
                                 child: Row(
-                                  children: [
+                                  children: const [
                                     Icon(
                                       Icons.arrow_back,
                                       color: whiteMv,

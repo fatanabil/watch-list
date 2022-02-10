@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:movie_list/data/movie.dart';
 import 'package:movie_list/main_page.dart';
-import 'package:movie_list/search_movie.dart';
-import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
-import 'package:movie_list/widgets/movie_card.dart';
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +18,7 @@ class MyApp extends StatelessWidget {
         primaryColor: priBlue,
         colorScheme: ColorScheme.fromSwatch().copyWith(secondary: accGreen),
       ),
-      home: MainPage(),
+      home: const MainPage(),
     );
   }
 }

@@ -14,7 +14,6 @@ class WatchlistUnFragment extends StatefulWidget {
 class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
   List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
-  late Offset _tapPosition;
 
   Future<void> fetchData() async {
     var data = await movieDb.getUnwatchMovie();
@@ -27,7 +26,6 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (mounted) {
       setState(() {
@@ -38,11 +36,12 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
 
   @override
   Widget build(BuildContext context) {
-    return list.length > 0
+    return list.isNotEmpty
         ? GridView.builder(
             itemCount: list.length,
-            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 childAspectRatio: 3 / 2,
                 crossAxisSpacing: 10.0,
@@ -66,9 +65,7 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                       child: InkWell(
                         splashColor: whiteMv.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(5),
-                        onTapDown: (TapDownDetails details) {
-                          _tapPosition = details.globalPosition;
-                        },
+                        onTapDown: (TapDownDetails details) {},
                         onLongPress: () {
                           showMenu(
                             context: context,
@@ -77,7 +74,7 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                             items: [
                               PopupMenuItem(
                                 child: Row(
-                                  children: [
+                                  children: const [
                                     Icon(
                                       Icons.add,
                                       color: whiteMv,
@@ -100,7 +97,7 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                       Icons.delete,
                                       color: Colors.red[400],
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 8,
                                     ),
                                     Text(

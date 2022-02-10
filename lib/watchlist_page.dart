@@ -18,7 +18,7 @@ class _WatchlistPageState extends State<WatchlistPage> {
       backgroundColor: dBlue,
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.only(top: 24),
+          padding: const EdgeInsets.only(top: 24),
           width: Size.screenWidth,
           height: Size.screenHeight,
           child: DefaultTabController(
@@ -31,10 +31,10 @@ class _WatchlistPageState extends State<WatchlistPage> {
                     fontSize: 32,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 24,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 48,
                   child: TabBar(
                     indicatorColor: accGreen,
@@ -50,7 +50,7 @@ class _WatchlistPageState extends State<WatchlistPage> {
                     ],
                   ),
                 ),
-                Expanded(
+                const Expanded(
                   child: TabBarView(
                     children: [
                       Center(

@@ -7,12 +7,13 @@ class MovieCard extends StatelessWidget {
   final double rating;
   final String posterUrl;
 
-  MovieCard({
+  const MovieCard({
+    Key? key,
     this.name = '',
     this.year = '',
     this.rating = 0.0,
     this.posterUrl = 'N/A',
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class MovieCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: accGreen,
         image: posterUrl == null || posterUrl == 'N/A'
-            ? DecorationImage(
+            ? const DecorationImage(
                 image: AssetImage('assets/img/default.png'),
               )
             : DecorationImage(
@@ -55,18 +56,18 @@ class MovieCard extends StatelessWidget {
                           Colors.black.withOpacity(0.7),
                           Colors.transparent
                         ],
-                        stops: [0.3, 1],
+                        stops: const [0.3, 1],
                       ),
                       borderRadius: BorderRadius.circular(5),
                     ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 8, bottom: 16, right: 8),
+              padding: const EdgeInsets.only(left: 8, bottom: 16, right: 8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
+                  const Align(
                     alignment: Alignment.topRight,
                   ),
                   Column(

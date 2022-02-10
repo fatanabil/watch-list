@@ -49,7 +49,7 @@ class _MovieDetailState extends State<MovieDetail> {
 
   Future<int> checkMovie(String movieId) async {
     var result = await movieDb.getMovieById(movieId);
-    if (result.length < 1) {
+    if (result.isEmpty) {
       return 1;
     } else {
       return 0;
@@ -58,7 +58,6 @@ class _MovieDetailState extends State<MovieDetail> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (mounted) {
       _fetchData(widget.movieId);
@@ -89,10 +88,11 @@ class _MovieDetailState extends State<MovieDetail> {
       backgroundColor: dBlue,
       appBar: AppBar(
         backgroundColor: priBlue,
-        title: Text('Movie Detail'),
+        title: const Text('Movie Detail'),
       ),
       body: ListView(
-        padding: EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 72),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 24, bottom: 72),
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,7 +105,7 @@ class _MovieDetailState extends State<MovieDetail> {
                   borderRadius: BorderRadius.circular(5),
                   image: DecorationImage(
                     image: Image.network(
-                      '${widget.posterUrl}',
+                      widget.posterUrl,
                       errorBuilder: (context, error, stackTrace) {
                         return Image.asset('assets/img/default.png');
                       },
@@ -113,28 +113,28 @@ class _MovieDetailState extends State<MovieDetail> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                child: AspectRatio(
+                child: const AspectRatio(
                   aspectRatio: 2 / 3,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 16,
               ),
               Expanded(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.movieTitle}',
+                        widget.movieTitle,
                         style: mainStyle.copyWith(
                           fontSize: 24,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
-                        '${widget.year}',
+                        widget.year,
                         style: sub.copyWith(
                           fontSize: 18,
                           color: accGreen,
@@ -155,7 +155,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Director',
@@ -166,11 +166,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         '${detailMovie['Director']}',
@@ -183,7 +183,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Writer',
@@ -194,11 +194,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         '${detailMovie['Writer']}',
@@ -211,7 +211,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Actors',
@@ -222,11 +222,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         '${detailMovie['Actors']}',
@@ -239,7 +239,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Genre',
@@ -250,11 +250,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         '${detailMovie['Genre']}',
@@ -267,7 +267,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'ImDB Rating',
@@ -278,11 +278,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         '${detailMovie['imdbRating']} / 10',
@@ -295,7 +295,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Rotten',
@@ -306,14 +306,14 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
-                        detailMovie.length <= 0 ||
+                        detailMovie.isEmpty ||
                                 detailMovie['Ratings'].length <= 1
                             ? '-'
                             : '${detailMovie['Ratings'][1]['Value']}',
@@ -326,7 +326,7 @@ class _MovieDetailState extends State<MovieDetail> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     width: 100,
                     child: Text(
                       'Plot',
@@ -337,11 +337,11 @@ class _MovieDetailState extends State<MovieDetail> {
                     ':',
                     style: mainStyle.copyWith(color: whiteMv),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 8,
                   ),
                   Expanded(
-                    child: Container(
+                    child: SizedBox(
                       width: double.infinity,
                       child: Text(
                         "\'${detailMovie['Plot']}\'",
@@ -371,7 +371,7 @@ class _MovieDetailState extends State<MovieDetail> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   backgroundColor: priBlue,
-                  title: Text(
+                  title: const Text(
                     'Do you want to remove this movie from watchlist?',
                     style: TextStyle(
                       fontSize: 16,
@@ -379,8 +379,8 @@ class _MovieDetailState extends State<MovieDetail> {
                     ),
                   ),
                   content: Text(
-                    '${widget.movieTitle}',
-                    style: TextStyle(
+                    widget.movieTitle,
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                       color: whiteMv,
@@ -391,7 +391,7 @@ class _MovieDetailState extends State<MovieDetail> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: const Text(
                         'Cancel',
                         style: TextStyle(
                           fontSize: 16,
@@ -409,7 +409,7 @@ class _MovieDetailState extends State<MovieDetail> {
                         });
                         Navigator.of(context).pop();
                       },
-                      child: Text(
+                      child: const Text(
                         'Remove',
                         style: TextStyle(
                           fontSize: 16,
@@ -426,7 +426,7 @@ class _MovieDetailState extends State<MovieDetail> {
           }
         },
         label: AnimatedSwitcher(
-          duration: Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 200),
           transitionBuilder: (Widget child, Animation<double> animation) =>
               FadeTransition(
             opacity: animation,
@@ -437,14 +437,14 @@ class _MovieDetailState extends State<MovieDetail> {
             ),
           ),
           child: _isAdded
-              ? Icon(
+              ? const Icon(
                   Icons.check,
                   color: priBlue,
                 )
               : Row(
-                  children: [
+                  children: const [
                     Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
+                      padding: EdgeInsets.only(right: 10.0),
                       child: Icon(Icons.add),
                     ),
                     Text('Add to Watchlist'),

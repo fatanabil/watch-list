@@ -1,6 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_list/data/api_auth.dart';
 import 'package:movie_list/movie_detail_page.dart';
@@ -48,7 +45,6 @@ class _SearchMovieState extends State<SearchMovie> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     if (mounted) {
       _fetchData(widget.movies.name);
@@ -63,13 +59,13 @@ class _SearchMovieState extends State<SearchMovie> {
       backgroundColor: dBlue,
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: Container(
+        child: SizedBox(
           width: double.infinity,
           height: double.infinity,
           child: Column(
             children: [
               Container(
-                padding: EdgeInsets.only(top: 16, right: 16, left: 16),
+                padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
                 child: Column(
                   children: [
                     Text(
@@ -78,7 +74,7 @@ class _SearchMovieState extends State<SearchMovie> {
                     ),
                     // Search Bar
                     Container(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Material(
                         elevation: 5,
                         color: dBlue,
@@ -86,8 +82,8 @@ class _SearchMovieState extends State<SearchMovie> {
                         shadowColor: lBlue,
                         child: TextFormField(
                           initialValue: widget.movieSearch == 'null'
-                              ? '$movies'
-                              : '${widget.movieSearch}',
+                              ? movies
+                              : widget.movieSearch,
                           onChanged: (moviesIn) {
                             widget.movieSearch = moviesIn;
                           },
@@ -100,7 +96,7 @@ class _SearchMovieState extends State<SearchMovie> {
                             fillColor: priBlue,
                             filled: true,
                             suffixIcon: IconButton(
-                              icon: Icon(Icons.search_rounded),
+                              icon: const Icon(Icons.search_rounded),
                               color: whiteMv,
                               onPressed: () {
                                 setState(() {
@@ -112,7 +108,7 @@ class _SearchMovieState extends State<SearchMovie> {
                                 });
                               },
                             ),
-                            contentPadding: EdgeInsets.only(
+                            contentPadding: const EdgeInsets.only(
                                 left: 24, bottom: 20, top: 20, right: 24),
                             hintText: 'Search Movies',
                             hintStyle: mainStyle,
@@ -124,7 +120,7 @@ class _SearchMovieState extends State<SearchMovie> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.only(bottom: 16),
                           child: Text(
                             widget.movieSearch == 'null'
                                 ? "Result For \'$movies\'"
@@ -140,8 +136,7 @@ class _SearchMovieState extends State<SearchMovie> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 0),
-                  child: _movieList['Response'] == 'False' ||
-                          _movieList.length <= 0
+                  child: _movieList['Response'] == 'False' || _movieList.isEmpty
                       ? Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -150,7 +145,7 @@ class _SearchMovieState extends State<SearchMovie> {
                               Image.asset(
                                 'assets/img/no-movie.png',
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 16,
                               ),
                               Text(
@@ -169,7 +164,7 @@ class _SearchMovieState extends State<SearchMovie> {
                         )
                       : Container(
                           child: GridView.builder(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
                             gridDelegate:
                                 SliverGridDelegateWithFixedCrossAxisCount(
@@ -183,7 +178,7 @@ class _SearchMovieState extends State<SearchMovie> {
                               mainAxisSpacing: 10.0,
                             ),
                             itemCount: _movieList['Response'] == 'False' ||
-                                    _movieList.length <= 0
+                                    _movieList.isEmpty
                                 ? 0
                                 : _movieList['Search'].length,
                             itemBuilder: (BuildContext context, int index) {
