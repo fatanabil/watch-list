@@ -87,6 +87,24 @@ class MovieDbProvider {
     });
   }
 
+  Future<int> updateToUnwatch(String movieID, MovieModel item) async {
+    final db = await init();
+
+    int result = await db.update('Watch_list', item.toMap(),
+        where: "movieID = ? ", whereArgs: [movieID]);
+
+    return result;
+  }
+
+  Future<int> updateToDone(String movieID, MovieModel item) async {
+    final db = await init();
+
+    int result = await db.update('Watch_list', item.toMap(),
+        where: "movieID = ?", whereArgs: [movieID]);
+
+    return result;
+  }
+
   Future<int> deleteItem(String movieID) async {
     final db = await init();
 
