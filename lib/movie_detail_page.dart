@@ -82,6 +82,7 @@ class _MovieDetailState extends State<MovieDetail> {
       movieId: widget.movieId,
       movieTitle: widget.movieTitle,
       moviePoster: widget.posterUrl,
+      movieYear: widget.year,
     );
 
     return Scaffold(
