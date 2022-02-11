@@ -15,6 +15,16 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
   List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
 
+  late Offset tapXY;
+  late RenderBox overlay;
+
+  RelativeRect get relRectSize => RelativeRect.fromRect(
+      tapXY & const Size(40, 40), Offset.zero & overlay.size);
+
+  void getPosition(TapDownDetails detail) {
+    tapXY = detail.globalPosition;
+  }
+
   Future<void> fetchData() async {
     var data = await movieDb.getUnwatchMovie();
     if (mounted) {
@@ -36,6 +46,8 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
 
   @override
   Widget build(BuildContext context) {
+    overlay = Overlay.of(context)?.context.findRenderObject() as RenderBox;
+
     return list.isNotEmpty
         ? GridView.builder(
             itemCount: list.length,
@@ -65,11 +77,11 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                       child: InkWell(
                         splashColor: whiteMv.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(5),
-                        onTapDown: (TapDownDetails details) {},
+                        onTapDown: getPosition,
                         onLongPress: () {
                           showMenu(
                             context: context,
-                            position: RelativeRect.fill,
+                            position: relRectSize,
                             color: priBlue,
                             items: [
                               PopupMenuItem(
@@ -84,7 +96,10 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                     ),
                                     Text(
                                       'Add to Done list',
-                                      style: TextStyle(color: whiteMv),
+                                      style: TextStyle(
+                                        color: whiteMv,
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -102,7 +117,10 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                     ),
                                     Text(
                                       'Remove from Watch list',
-                                      style: TextStyle(color: Colors.red[400]),
+                                      style: TextStyle(
+                                        color: Colors.red[400],
+                                        fontSize: 14,
+                                      ),
                                     ),
                                   ],
                                 ),

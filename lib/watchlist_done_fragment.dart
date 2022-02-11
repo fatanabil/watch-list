@@ -16,6 +16,16 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
   List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
 
+  late Offset tapXY;
+  late RenderBox overlay;
+
+  RelativeRect get relRectSize => RelativeRect.fromRect(
+      tapXY & const Size(40, 40), Offset.zero & overlay.size);
+
+  void getPosition(TapDownDetails detail) {
+    tapXY = detail.globalPosition;
+  }
+
   Future<void> fetchData() async {
     var data = await movieDb.getWatchedMovie();
     if (mounted) {
@@ -37,6 +47,8 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
 
   @override
   Widget build(BuildContext context) {
+    overlay = Overlay.of(context)?.context.findRenderObject() as RenderBox;
+
     return list.isNotEmpty
         ? GridView.builder(
             itemCount: list.length,
@@ -66,10 +78,11 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
                       child: InkWell(
                         splashColor: whiteMv.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(5),
+                        onTapDown: getPosition,
                         onLongPress: () {
                           showMenu(
                             context: context,
-                            position: RelativeRect.fill,
+                            position: relRectSize,
                             color: priBlue,
                             items: [
                               PopupMenuItem(
