@@ -1,14 +1,14 @@
 # WatchList
 
-#### An app for search movies and add it to your WatchList.
+#### An example app for search movies and add it to your WatchList.
 
 ###### *(Still under development)*
 
 ## Preview
 
 #### *Homepage*</br>
-<img src="https://user-images.githubusercontent.com/84890105/153428885-92b14365-72d5-4493-9c16-84eef00f88c0.png" alt="Home Page" width="300px"> 
-<!-- ![home-page](https://user-images.githubusercontent.com/84890105/153428885-92b14365-72d5-4493-9c16-84eef00f88c0.png | width=100) -->
+<img src="https://user-images.githubusercontent.com/84890105/153544720-4fffb137-07b8-4684-8d08-be21a8d478d4.png" alt="Home Page" width="300px"> 
+<!-- ![homepage](https://user-images.githubusercontent.com/84890105/153544720-4fffb137-07b8-4684-8d08-be21a8d478d4.png) -->
 
 #### *Search Movie*</br>
 <img src="https://user-images.githubusercontent.com/84890105/153429013-8cd65f03-33c0-4332-b65e-d251598b580e.png" alt="Search Movie" width="300px"> 
