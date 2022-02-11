@@ -19,8 +19,8 @@ class _WatchlistPageState extends State<WatchlistPage> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(top: 24),
-          width: Size.screenWidth,
-          height: Size.screenHeight,
+          width: MySize.screenWidth,
+          height: MySize.screenHeight,
           child: DefaultTabController(
             length: 2,
             child: Column(

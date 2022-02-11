@@ -17,8 +17,8 @@ class _ProfilePageState extends State<ProfilePage> {
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(top: 24),
-          width: Size.screenWidth,
-          height: Size.screenHeight,
+          width: MySize.screenWidth,
+          height: MySize.screenHeight,
           child: Column(
             children: [
               Text(

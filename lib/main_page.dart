@@ -30,8 +30,8 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    Size().init(context);
-    screenWidth = Size.screenWidth;
+    MySize().init(context);
+    screenWidth = MySize.screenWidth;
 
     return Scaffold(
       body: tabs[_selectedNavbar],

@@ -29,8 +29,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Container(
                     padding: const EdgeInsets.all(16),
-                    width: Size.screenWidth,
-                    height: Size.screenWidth / 2,
+                    width: MySize.screenWidth,
+                    height: MySize.screenWidth / 2,
                     color: accGreen,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

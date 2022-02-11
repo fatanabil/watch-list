@@ -157,7 +157,7 @@ class _SearchMovieState extends State<SearchMovie> {
                                 ),
                               ),
                               SizedBox(
-                                height: Size.screenHeight / 5,
+                                height: MySize.screenHeight / 5,
                               ),
                             ],
                           ),

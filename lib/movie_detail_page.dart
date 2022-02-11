@@ -99,7 +99,7 @@ class _MovieDetailState extends State<MovieDetail> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Container(
-                width: Size.screenWidth / 3,
+                width: MySize.screenWidth / 3,
                 decoration: BoxDecoration(
                   color: accGreen,
                   borderRadius: BorderRadius.circular(5),
@@ -147,7 +147,7 @@ class _MovieDetailState extends State<MovieDetail> {
             ],
           ),
           SizedBox(
-            width: Size.screenWidth,
+            width: MySize.screenWidth,
             height: 16,
           ),
           Column(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Size {
+class MySize {
   static late MediaQueryData mediaQuery;
   static late double screenWidth;
   static late double screenHeight;
