@@ -65,6 +65,15 @@ class _HomePageState extends State<HomePage> {
                       onChanged: (moviesIn) {
                         movies = moviesIn;
                       },
+                      textInputAction: TextInputAction.search,
+                      onSubmitted: (value) {
+                        _navigateToNextScreen(
+                            context,
+                            SearchMovie(
+                              movies: Movie(movies),
+                            ));
+                        FocusScope.of(context).requestFocus(FocusNode());
+                      },
                       style: mainStyle,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(

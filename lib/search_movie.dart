@@ -87,6 +87,14 @@ class _SearchMovieState extends State<SearchMovie> {
                           onChanged: (moviesIn) {
                             widget.movieSearch = moviesIn;
                           },
+                          onFieldSubmitted: (value) {
+                            setState(() {
+                              if (widget.movieSearch != 'null') {
+                                _fetchData(widget.movieSearch);
+                              }
+                            });
+                            FocusScope.of(context).requestFocus(FocusNode());
+                          },
                           style: mainStyle,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(
