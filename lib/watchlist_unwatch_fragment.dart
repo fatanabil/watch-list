@@ -98,7 +98,6 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                       'Add to Done list',
                                       style: TextStyle(
                                         color: whiteMv,
-                                        fontSize: 14,
                                       ),
                                     ),
                                   ],
@@ -119,7 +118,6 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                       'Remove from Watch list',
                                       style: TextStyle(
                                         color: Colors.red[400],
-                                        fontSize: 14,
                                       ),
                                     ),
                                   ],
