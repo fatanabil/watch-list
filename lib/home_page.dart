@@ -102,7 +102,7 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Recomended for you',
+                            'Recommended for you',
                             style: menuTitle,
                           ),
                           const Spacer(),
