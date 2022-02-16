@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/helpers/dbhelper.dart';
-import 'package:movie_list/models/MovieModel.dart';
+import 'package:movie_list/models/movie_model.dart';
 
 import 'theme.dart';
 import 'widgets/watchlist_card.dart';
@@ -13,7 +13,6 @@ class WatchlistDoneFragment extends StatefulWidget {
 }
 
 class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
-  List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
 
   late Offset tapXY;
@@ -26,32 +25,38 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
     tapXY = detail.globalPosition;
   }
 
-  Future<void> fetchData() async {
+  Future<List<MovieModel>> _getData() async {
     var data = await movieDb.getWatchedMovie();
-    if (mounted) {
-      setState(() {
-        list = data;
-      });
-    }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    if (mounted) {
-      setState(() {
-        fetchData();
-      });
-    }
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
     overlay = Overlay.of(context)?.context.findRenderObject() as RenderBox;
 
-    return list.isNotEmpty
-        ? GridView.builder(
-            itemCount: list.length,
+    return FutureBuilder(
+      future: _getData(),
+      builder: (context, snapshot) {
+        var result = [];
+        if (snapshot.hasData) {
+          result = snapshot.data! as List<MovieModel>;
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(color: accGreen),
+          );
+        } else if (result.isEmpty) {
+          return Center(
+            child: Image.asset(
+              'assets/img/no-movie.png',
+              scale: 2,
+            ),
+          );
+        } else {
+          return GridView.builder(
+            itemCount: result.length,
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -64,9 +69,9 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
                 children: [
                   Positioned.fill(
                     child: WatchlistCard(
-                      title: list[index].movieTitle,
-                      year: list[index].movieYear,
-                      posterUrl: list[index].moviePoster,
+                      title: result[index].movieTitle,
+                      year: result[index].movieYear,
+                      posterUrl: result[index].moviePoster,
                     ),
                   ),
                   Positioned.fill(
@@ -101,18 +106,18 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
                                     ),
                                   ],
                                 ),
-                                value: ['move', list[index].movieId],
+                                value: ['move', result[index].movieId],
                               ),
                             ],
                           ).then((value) {
                             if (value![0] == 'move') {
                               if (mounted) {
                                 setState(() async {
-                                  MovieModel movie = list[index];
+                                  MovieModel movie = result[index];
                                   movie.isWatched = 0;
                                   await movieDb.updateToUnwatch(
                                       value[1], movie);
-                                  fetchData();
+                                  setState(() {});
                                 });
                               }
                             }
@@ -124,15 +129,9 @@ class _WatchlistDoneFragmentState extends State<WatchlistDoneFragment> {
                 ],
               );
             },
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/img/no-movie.png',
-                scale: 2,
-              ),
-            ],
           );
+        }
+      },
+    );
   }
 }

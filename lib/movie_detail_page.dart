@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/helpers/dbhelper.dart';
-import 'package:movie_list/models/MovieModel.dart';
+import 'package:movie_list/models/movie_model.dart';
 import 'package:movie_list/size.dart';
 import 'package:movie_list/theme.dart';
 import 'package:http/http.dart' as http;
@@ -24,27 +24,21 @@ class MovieDetail extends StatefulWidget {
 }
 
 class _MovieDetailState extends State<MovieDetail> {
-  Map<String, dynamic> detailMovie = {};
   MovieDbProvider movieDb = MovieDbProvider();
   bool _isAdded = false;
 
-  Future<void> _fetchData(movieId) async {
+  Future<Map<String, dynamic>> _getData(movieId) async {
     var apiKey = ApiAuth().getApiKey();
     var url = "http://www.omdbapi.com/?apikey=$apiKey&&i=$movieId";
 
     var response = await http.get(Uri.parse(url));
+    var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-    if (response.statusCode == 200) {
-      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
-
-      if (mounted) {
-        setState(() {
-          detailMovie = data;
-        });
-      }
-    } else {
-      print('request failed with status code : ${response.statusCode}');
+    if (response.statusCode == 404) {
+      throw Error();
     }
+
+    return data;
   }
 
   Future<int> checkMovie(String movieId) async {
@@ -60,7 +54,6 @@ class _MovieDetailState extends State<MovieDetail> {
   void initState() {
     super.initState();
     if (mounted) {
-      _fetchData(widget.movieId);
       checkMovie(widget.movieId).then((value) {
         if (value == 1) {
           setState(() {
@@ -150,208 +143,224 @@ class _MovieDetailState extends State<MovieDetail> {
             width: MySize.screenWidth,
             height: 16,
           ),
-          Column(
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Director',
-                      style: mainStyle.copyWith(color: whiteMv),
+          FutureBuilder(
+            future: _getData(widget.movieId),
+            builder: (context, snapshot) {
+              var result = {};
+
+              if (snapshot.hasData) {
+                result = snapshot.data! as Map<String, dynamic>;
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(color: accGreen),
+                );
+              } else {
+                return Column(
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Director',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              '${result['Director']}',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        '${detailMovie['Director']}',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Writer',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              '${result['Writer']}',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Writer',
-                      style: mainStyle.copyWith(color: whiteMv),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Actors',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              '${result['Actors']}',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        '${detailMovie['Writer']}',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Genre',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              '${result['Genre']}',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Actors',
-                      style: mainStyle.copyWith(color: whiteMv),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'ImDB Rating',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              '${result['imdbRating']} / 10',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        '${detailMovie['Actors']}',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Rotten',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              result.isEmpty || result['Ratings'].length <= 1
+                                  ? '-'
+                                  : '${result['Ratings'][1]['Value']}',
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Genre',
-                      style: mainStyle.copyWith(color: whiteMv),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: Text(
+                            'Plot',
+                            style: mainStyle.copyWith(color: whiteMv),
+                          ),
+                        ),
+                        Text(
+                          ':',
+                          style: mainStyle.copyWith(color: whiteMv),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              "\'${result['Plot']}\'",
+                              style: mainStyle.copyWith(color: whiteMv),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        '${detailMovie['Genre']}',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'ImDB Rating',
-                      style: mainStyle.copyWith(color: whiteMv),
-                    ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        '${detailMovie['imdbRating']} / 10',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Rotten',
-                      style: mainStyle.copyWith(color: whiteMv),
-                    ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        detailMovie.isEmpty ||
-                                detailMovie['Ratings'].length <= 1
-                            ? '-'
-                            : '${detailMovie['Ratings'][1]['Value']}',
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    child: Text(
-                      'Plot',
-                      style: mainStyle.copyWith(color: whiteMv),
-                    ),
-                  ),
-                  Text(
-                    ':',
-                    style: mainStyle.copyWith(color: whiteMv),
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Text(
-                        "\'${detailMovie['Plot']}\'",
-                        style: mainStyle.copyWith(color: whiteMv),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                );
+              }
+            },
           ),
         ],
       ),

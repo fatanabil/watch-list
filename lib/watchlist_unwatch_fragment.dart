@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_list/helpers/dbhelper.dart';
-import 'package:movie_list/models/MovieModel.dart';
+import 'package:movie_list/models/movie_model.dart';
 import 'package:movie_list/theme.dart';
 import 'package:movie_list/widgets/watchlist_card.dart';
 
@@ -12,7 +12,6 @@ class WatchlistUnFragment extends StatefulWidget {
 }
 
 class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
-  List<MovieModel> list = [];
   MovieDbProvider movieDb = MovieDbProvider();
 
   late Offset tapXY;
@@ -25,32 +24,38 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
     tapXY = detail.globalPosition;
   }
 
-  Future<void> fetchData() async {
+  Future<List<MovieModel>> _getData() async {
     var data = await movieDb.getUnwatchMovie();
-    if (mounted) {
-      setState(() {
-        list = data;
-      });
-    }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    if (mounted) {
-      setState(() {
-        fetchData();
-      });
-    }
+    return data;
   }
 
   @override
   Widget build(BuildContext context) {
     overlay = Overlay.of(context)?.context.findRenderObject() as RenderBox;
 
-    return list.isNotEmpty
-        ? GridView.builder(
-            itemCount: list.length,
+    return FutureBuilder(
+      future: _getData(),
+      builder: ((context, snapshot) {
+        var result = [];
+        if (snapshot.hasData) {
+          result = snapshot.data as List<MovieModel>;
+        }
+
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(color: accGreen),
+          );
+        } else if (result.isEmpty) {
+          return Center(
+            child: Image.asset(
+              'assets/img/no-movie.png',
+              scale: 2,
+            ),
+          );
+        } else {
+          return GridView.builder(
+            itemCount: result.length,
             padding:
                 const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -63,9 +68,9 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                 children: [
                   Positioned.fill(
                     child: WatchlistCard(
-                      title: list[index].movieTitle,
-                      year: list[index].movieYear,
-                      posterUrl: list[index].moviePoster,
+                      title: result[index].movieTitle,
+                      year: result[index].movieYear,
+                      posterUrl: result[index].moviePoster,
                     ),
                   ),
                   Positioned.fill(
@@ -102,7 +107,7 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                     ),
                                   ],
                                 ),
-                                value: ['add', list[index].movieId],
+                                value: ['add', result[index].movieId],
                               ),
                               PopupMenuItem(
                                 child: Row(
@@ -122,24 +127,24 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                                     ),
                                   ],
                                 ),
-                                value: ['remove', list[index].movieId],
+                                value: ['remove', result[index].movieId],
                               ),
                             ],
                           ).then((value) {
                             if (value?[0] == 'add') {
                               if (mounted) {
                                 setState(() async {
-                                  MovieModel movie = list[index];
+                                  MovieModel movie = result[index];
                                   movie.isWatched = 1;
                                   await movieDb.updateToDone(value![1], movie);
-                                  fetchData();
+                                  setState(() {});
                                 });
                               }
                             } else {
                               if (mounted) {
                                 setState(() async {
                                   await movieDb.deleteItem(value![1]);
-                                  fetchData();
+                                  setState(() {});
                                 });
                               }
                             }
@@ -151,15 +156,9 @@ class WatchlistUnFragmentState extends State<WatchlistUnFragment> {
                 ],
               );
             },
-          )
-        : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/img/no-movie.png',
-                scale: 2,
-              ),
-            ],
           );
+        }
+      }),
+    );
   }
 }

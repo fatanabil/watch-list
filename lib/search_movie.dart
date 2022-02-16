@@ -22,33 +22,19 @@ class SearchMovie extends StatefulWidget {
 }
 
 class _SearchMovieState extends State<SearchMovie> {
-  Map<String, dynamic> _movieList = {};
-
-  Future<void> _fetchData(movieName) async {
+  Future<Map<String, dynamic>> _getData(movieName) async {
     var apiKey = ApiAuth().getApiKey();
     var url = "http://www.omdbapi.com/?apikey=$apiKey&&s=$movieName";
 
     var response = await http.get(Uri.parse(url));
 
-    if (response.statusCode == 200) {
-      var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
+    var data = convert.jsonDecode(response.body) as Map<String, dynamic>;
 
-      if (mounted) {
-        setState(() {
-          _movieList = data;
-        });
-      }
-    } else {
-      print('request failed with status code : ${response.statusCode}');
+    if (response.statusCode == 404) {
+      throw Error();
     }
-  }
 
-  @override
-  void initState() {
-    super.initState();
-    if (mounted) {
-      _fetchData(widget.movies.name);
-    }
+    return data;
   }
 
   @override
@@ -88,11 +74,7 @@ class _SearchMovieState extends State<SearchMovie> {
                             widget.movieSearch = moviesIn;
                           },
                           onFieldSubmitted: (value) {
-                            setState(() {
-                              if (widget.movieSearch != 'null') {
-                                _fetchData(widget.movieSearch);
-                              }
-                            });
+                            setState(() {});
                             FocusScope.of(context).requestFocus(FocusNode());
                           },
                           style: mainStyle,
@@ -108,9 +90,6 @@ class _SearchMovieState extends State<SearchMovie> {
                               color: whiteMv,
                               onPressed: () {
                                 setState(() {
-                                  if (widget.movieSearch != 'null') {
-                                    _fetchData(widget.movieSearch);
-                                  }
                                   FocusScope.of(context)
                                       .requestFocus(FocusNode());
                                 });
@@ -144,8 +123,22 @@ class _SearchMovieState extends State<SearchMovie> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 0),
-                  child: _movieList['Response'] == 'False' || _movieList.isEmpty
-                      ? Container(
+                  child: FutureBuilder(
+                    future: _getData(widget.movieSearch == 'null'
+                        ? movies
+                        : widget.movieSearch),
+                    builder: (context, snapshot) {
+                      var result = {};
+                      if (snapshot.hasData) {
+                        result = snapshot.data! as Map<String, dynamic>;
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(color: accGreen),
+                        );
+                      } else if (result['Response'] == "False") {
+                        return Container(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -169,8 +162,9 @@ class _SearchMovieState extends State<SearchMovie> {
                               ),
                             ],
                           ),
-                        )
-                      : Container(
+                        );
+                      } else {
+                        return Container(
                           child: GridView.builder(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
@@ -185,23 +179,20 @@ class _SearchMovieState extends State<SearchMovie> {
                               crossAxisSpacing: 10.0,
                               mainAxisSpacing: 10.0,
                             ),
-                            itemCount: _movieList['Response'] == 'False' ||
-                                    _movieList.isEmpty
+                            itemCount: result['Response'] == "False"
                                 ? 0
-                                : _movieList['Search'].length,
+                                : result['Search'].length,
                             itemBuilder: (BuildContext context, int index) {
                               return Stack(
                                 children: [
                                   Positioned.fill(
                                     child: Container(
-                                      key: Key(
-                                          _movieList['Search'][index]['Title']),
+                                      key:
+                                          Key(result['Search'][index]['Title']),
                                       child: MovieCard(
-                                        name: _movieList['Search'][index]
-                                            ['Title'],
-                                        year: _movieList['Search'][index]
-                                            ['Year'],
-                                        posterUrl: _movieList['Search'][index]
+                                        name: result['Search'][index]['Title'],
+                                        year: result['Search'][index]['Year'],
+                                        posterUrl: result['Search'][index]
                                             ['Poster'],
                                       ),
                                     ),
@@ -219,14 +210,14 @@ class _SearchMovieState extends State<SearchMovie> {
                                           _navigateToNextScreen(
                                             context,
                                             MovieDetail(
-                                              movieId: _movieList['Search']
-                                                  [index]['imdbID'],
-                                              movieTitle: _movieList['Search']
+                                              movieId: result['Search'][index]
+                                                  ['imdbID'],
+                                              movieTitle: result['Search']
                                                   [index]['Title'],
-                                              year: _movieList['Search'][index]
+                                              year: result['Search'][index]
                                                   ['Year'],
-                                              posterUrl: _movieList['Search']
-                                                  [index]['Poster'],
+                                              posterUrl: result['Search'][index]
+                                                  ['Poster'],
                                             ),
                                           );
                                         },
@@ -238,7 +229,10 @@ class _SearchMovieState extends State<SearchMovie> {
                               );
                             },
                           ),
-                        ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               )
             ],
