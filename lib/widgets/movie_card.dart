@@ -21,7 +21,7 @@ class MovieCard extends StatelessWidget {
       width: 120,
       decoration: BoxDecoration(
         color: accGreen,
-        image: posterUrl == null || posterUrl == 'N/A'
+        image: posterUrl == 'N/A'
             ? const DecorationImage(
                 image: AssetImage('assets/img/default.png'),
               )
@@ -43,7 +43,7 @@ class MovieCard extends StatelessWidget {
         child: Stack(
           children: [
             Container(
-              decoration: posterUrl == null || posterUrl == 'N/A'
+              decoration: posterUrl == 'N/A'
                   ? BoxDecoration(
                       color: Colors.transparent,
                       borderRadius: BorderRadius.circular(5),
@@ -78,7 +78,7 @@ class MovieCard extends StatelessWidget {
                         name,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
-                        style: posterUrl == null || posterUrl == 'N/A'
+                        style: posterUrl == 'N/A'
                             ? movieTitle.copyWith(color: priBlue)
                             : movieTitle,
                         textAlign: TextAlign.left,
